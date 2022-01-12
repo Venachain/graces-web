@@ -48,7 +48,7 @@ export function chainFullSync(chainId) {
 
 export function chainIncrementSync(chainId) {
     return request({
-        url: '/chain/sync/info/' + chainId,
+        url: '/chain/incrsync/start/' + chainId,
         method: 'get'
     })
 }
