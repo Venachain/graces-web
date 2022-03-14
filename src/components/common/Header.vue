@@ -25,7 +25,7 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://platonenterprise.github.io/" target="_blank">
+                        <a href="https://venachain-docs.readthedocs.io/zh/latest/" target="_blank">
                             <el-dropdown-item>{{$t('i18n.document')}}</el-dropdown-item>
                         </a>
                         <el-dropdown-item divided command="switchLang">{{$t('i18n.btn')}}</el-dropdown-item>
