@@ -2,7 +2,7 @@
     <div class="blocks">
         <div style="padding:0px 30px 10px 30px">
             <div class="button-line">
-                <el-button type="primary" @click="dialogChainVisible = true">部署链</el-button>
+<!--                <el-button type="primary" @click="dialogChainVisible = true">部署链</el-button>-->
                 <el-button type="primary" @click="dialogFormVisible = true">添加链</el-button>
             </div>
             <el-card shadow="hover">
