@@ -51,21 +51,21 @@
         </div>
         <el-dialog :title="$t('i18n.add')" :visible.sync="dialogFormVisible">
             <p class="notify">{{ $t('i18n.chainNotify') }}</p>
-            <el-form :model="chainForm" label-width="150px" :label-position="'left'">
-                <el-form-item :label="$t('i18n.chainName') + ':'">
-                    <el-input v-model="chainForm.name" :placeholder="$t('i18n.chainName')"></el-input>
+            <el-form ref="chainForm" :model="chainForm" label-width="150px" :label-position="'left'" :rules='chainRules'>
+                <el-form-item :label="$t('i18n.chainName') + ':'" prop='name'>
+                    <el-input v-model="chainForm.name" :placeholder="$t('i18n.chainName')" maxlength="20"></el-input>
                 </el-form-item>
-                <el-form-item :label="'IP :'">
+                <el-form-item :label="'IP :'" prop='ip'>
                     <el-input v-model="chainForm.ip" :placeholder="'IP'"></el-input>
                 </el-form-item>
-                <el-form-item :label="$t('i18n.rpcPort') + ':'">
-                    <el-input v-model="chainForm.rpc_port" :placeholder="$t('i18n.rpcPort')"></el-input>
+                <el-form-item :label="$t('i18n.rpcPort') + ':'" prop='rpc_port'>
+                    <el-input type='number' v-model.number="chainForm.rpc_port" :placeholder="$t('i18n.rpcPort')"></el-input>
                 </el-form-item>
-                <el-form-item :label="$t('i18n.p2pPort') + ':'">
-                    <el-input v-model="chainForm.p2p_port" :placeholder="$t('i18n.p2pPort')"></el-input>
+                <el-form-item :label="$t('i18n.p2pPort') + ':'" prop='p2p_port'>
+                    <el-input type='number' v-model.number="chainForm.p2p_port" :placeholder="$t('i18n.p2pPort')"></el-input>
                 </el-form-item>
-                <el-form-item :label="$t('i18n.wsPort') + ':'">
-                    <el-input v-model="chainForm.ws_port" :placeholder="$t('i18n.wsPort')"></el-input>
+                <el-form-item :label="$t('i18n.wsPort') + ':'" prop='ws_port'>
+                    <el-input type='number' v-model.number="chainForm.ws_port" :placeholder="$t('i18n.wsPort')"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -105,6 +105,32 @@ import { getChainList, queryChain, addChain, chainFullSync, chainIncrementSync }
 import { dataUrl } from '@/config';
 export default {
     data: function() {
+        const valid = {
+            name : (rule, value, callback)=>{
+                if (value.length === 0){
+                    callback(new Error('链名称不能为空！'))
+                }else if(value.length >20 ){
+                    callback(new Error('链名称不得超过20字！ '))
+                }else{
+                    callback()
+                }
+            },
+            ip : (rule, value, callback)=>{
+                const reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+                if (!reg.test(value)){
+                    callback(new Error('IP地址校验失败！ '))
+                }else{
+                    callback()
+                }
+            },
+            port : (rule, value, callback)=>{
+                if (!(value > 0 && value <= 65535)){
+                    callback(new Error('请输入数字(1 ~ 65535)!'))
+                }else{
+                    callback()
+                }
+            }
+        }
         return {
             chainList: [],
             currentPage: 1,
@@ -117,9 +143,9 @@ export default {
             chainForm: {
                 name: '',
                 ip: '',
-                rpc_port: 0,
-                p2p_port: 0,
-                ws_port: 0
+                rpc_port: '',
+                p2p_port: '',
+                ws_port: ''
             },
             addChainForm: {
                 name: '',
@@ -128,7 +154,24 @@ export default {
             },
             lines: [],
             websocket: null,
-            sendFlag: false
+            sendFlag: false,
+            chainRules:{
+                name: [
+                    { required: true,trigger: 'blur', validator: valid.name },
+                ],
+                ip: [
+                    { required: true, trigger: 'blur', validator: valid.ip }
+                ],
+                rpc_port: [
+                    { required: true, trigger: 'blur', validator: valid.port }
+                ],
+                p2p_port: [
+                    { required: true, trigger: 'blur', validator: valid.port }
+                ],
+                ws_port: [
+                    { required: true, trigger: 'blur', validator: valid.port }
+                ],
+            },
         };
     },
     methods: {
@@ -230,43 +273,39 @@ export default {
             this.getChainsData();
         },
         submitForm() {
-            if (
-                this.chainForm.name == '' ||
-                this.chainForm.ip == '' ||
-                this.chainForm.rpc_port == 0 ||
-                this.chainForm.p2p_port == 0 ||
-                this.chainForm.ws_port == 0
-            ) {
-                this.$message({
-                    type: 'error',
-                    message: this.$t('i18n.submitFailed')
-                });
-                console.log('params error');
-                return;
-            }
-            let data = {
-                name: this.chainForm.name,
-                ip: this.chainForm.ip,
-                rpc_port: parseInt(this.chainForm.rpc_port),
-                p2p_port: parseInt(this.chainForm.p2p_port),
-                ws_port: parseInt(this.chainForm.ws_port)
-            };
-            this.saveLoading = true;
-            addChain(data)
-                .then(res => {
+            this.$refs['chainForm'].validate((valid)=>{
+                if(valid){
+                    let data = {
+                        name: this.chainForm.name,
+                        ip: this.chainForm.ip,
+                        rpc_port: this.chainForm.rpc_port,
+                        p2p_port: this.chainForm.p2p_port,
+                        ws_port: this.chainForm.ws_port
+                    };
+                    this.saveLoading = true;
+                    addChain(data)
+                        .then(res => {
+                            this.$message({
+                                type: 'success',
+                                message: this.$t('i18n.submitSuccess')
+                            });
+                            this.resetForm();
+                            this.getChainsData();
+                            this.dialogFormVisible = false;
+                            this.saveLoading = false;
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            this.saveLoading = false;
+                        });
+                }else{
                     this.$message({
-                        type: 'success',
-                        message: this.$t('i18n.submitSuccess')
+                        type: 'error',
+                        message: this.$t('i18n.submitFailed')
                     });
-                    this.resetForm();
-                    this.getChainsData();
-                    this.dialogFormVisible = false;
-                    this.saveLoading = false;
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.saveLoading = false;
-                });
+                    console.log('params error');
+                }
+            })
         },
         cancel() {
             this.dialogFormVisible = false;
@@ -280,9 +319,9 @@ export default {
             this.chainForm = {
                 name: '',
                 ip: '',
-                rpc_port: 0,
-                p2p_port: 0,
-                ws_port: 0
+                rpc_port: '',
+                p2p_port: '',
+                ws_port: ''
             };
         },
         resetAddFrom() {
@@ -333,7 +372,7 @@ export default {
     },
     beforeDestroy: function() {
         this.websocketClose();
-    }
+    },
 };
 </script>
 
