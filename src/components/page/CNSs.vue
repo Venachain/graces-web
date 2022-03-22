@@ -17,15 +17,15 @@
         </el-scrollbar>
 
         <el-dialog :title="'CNS'" :visible.sync="dialogFormVisible">
-            <el-form :model="form" label-width="150px" :label-position="'left'">
-                <el-form-item :label="$t('i18n.cnsContractName') + ':'" style="width: 350px">
-                    <el-input v-model="form.name" :placeholder="$t('i18n.pinput')" :disabled="isEdit"></el-input>
+            <el-form :model="form" label-width="150px" :label-position="'left'" :rules='rules'>
+                <el-form-item :label="$t('i18n.cnsContractName') + ':'" style="width: 350px" prop='name'>
+                    <el-input v-model="form.name" :placeholder="$t('i18n.pinput')" :disabled="isEdit" maxlength="100"></el-input>
                 </el-form-item>
-                <el-form-item :label="$t('i18n.version') + ':'" style="width: 350px">
-                    <el-input v-model="form.version" :placeholder="$t('i18n.version') + ' 0.0.0.1'" :disabled="isEdit"></el-input>
+                <el-form-item :label="$t('i18n.version') + ':'" style="width: 350px" prop='version'>
+                    <el-input v-model="form.version" :placeholder="$t('i18n.version') + ' 0.0.0.1'" :disabled="isEdit" maxlength="100"></el-input>
                 </el-form-item>
-                <el-form-item :label="$t('i18n.scAddr') + ':'">
-                    <el-input v-model="form.address" :placeholder="$t('i18n.scAddr')" :disabled="isEdit"></el-input>
+                <el-form-item :label="$t('i18n.scAddr') + ':'" prop='addr'>
+                    <el-input v-model="form.address" :placeholder="$t('i18n.scAddr')" :disabled="isEdit" maxlength="300"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -58,7 +58,18 @@ export default {
                 address: ''
             },
             isEdit: false,
-            canRequest: true
+            canRequest: true,
+            rules:{
+                name:[
+                    { required: true,trigger: 'blur', message:this.$t('i18n.CNSNameLimit')}
+                ],
+                version:[
+                    { required: true,trigger: 'blur', message:this.$t('i18n.CNSVersionLimit')}
+                ],
+                addr:[
+                    { required: true,trigger: 'blur', message:this.$t('i18n.CNSAddrLimit')}
+                ]
+            }
         };
     },
     methods: {
@@ -140,4 +151,7 @@ export default {
 </script>
 
 <style scoped>
+/deep/ .el-scrollbar .el-scrollbar__wrap{
+    padding-bottom: 18px;
+}
 </style>

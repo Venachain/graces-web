@@ -5,9 +5,9 @@
             <!-- <el-button style="float: right; padding: 3px 10px" type="text" v-if="showEdit" @click="openDialog2">{{
                 $t('i18n.addNodeAccess')
             }}</el-button> -->
-            <el-button style="float: right; padding: 3px 10px" type="text" v-if="showEdit" @click="openDialog">{{
+            <!-- <el-button style="float: right; padding: 3px 10px" type="text" v-if="showEdit" @click="openDialog">{{
                 $t('i18n.deployNewNode')
-            }}</el-button>
+            }}</el-button> -->
         </div>
 
         <el-scrollbar style="height: 100%">
@@ -326,6 +326,10 @@ export default {
 </script>
 
 <style scoped>
+/deep/ .el-scrollbar .el-scrollbar__wrap{
+    padding-bottom: 20px;
+}
+
 .node_icon {
     width: 40px;
     height: 40px;

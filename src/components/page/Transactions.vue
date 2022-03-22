@@ -2,8 +2,8 @@
 <div>
     <el-form :model="param" :rules="rules" ref="search" label-width="0px" class="ms-content" @submit.native.prevent>
         <el-form-item prop="info">
-            <el-input v-model="param.info" placeholder="Search by Transaction ID" @keyup.enter.native="submitForm()">
-                <el-button slot="prepend" icon="el-icon-lx-search"></el-button>
+            <el-input v-model="param.info" :placeholder="`${$t('i18n.transactionId')}`" @keyup.enter.native="submitForm()">
+                <el-button slot="prepend" icon="el-icon-lx-search" @click='submitForm'></el-button>
             </el-input>
         </el-form-item>
     </el-form>
@@ -98,8 +98,6 @@ export default {
                     })
 
                 } else {
-                    this.$message.error(this.$t("i18n.searchInfo"))
-                    this.getData()
                     return false
                 }
             });

@@ -50,7 +50,6 @@ export const messages = {
             fullScreen:'全屏',
             cancel_fullScreen:'取消全屏',
             admin:'超级管理员',
-            user:'用户',
             lastLoginTime:'上次登录时间',
             lastLoginIP:'上次登录IP',
             txStatistic:'七日交易统计',
@@ -61,7 +60,6 @@ export const messages = {
             pageNotExist:'啊哦~ 你所访问的页面不存在',
             add:'添加',
             cnsContractName : 'CNS合约名称',
-            version:'版本号',
             pinput:'请输入名称',
             scAddr:'合约地址',
             confirm:'确 定',
@@ -132,9 +130,9 @@ export const messages = {
             publicKey:'公钥信息',
             internalIP:'内网IP',
             externalIP:'外网IP',
-            rpcPort:'rpc端口',
-            p2pPort:'p2p端口',
-            wsPort: 'ws端口',
+            rpcPort:'RPC端口',
+            p2pPort:'P2P端口',
+            wsPort: 'WS端口',
             type:'类型',
             status:'状态',
             owner:'节点创建者',
@@ -149,8 +147,20 @@ export const messages = {
             userName: '服务器用户名称',
             remoteUserName: '远程服务器用户名称',
             remoteIp: '远程服务器Ip',
-            chainNotify: '请填写第一个节点信息'
-
+            chainNotify: '请填写第一个节点信息',
+            transactionId: '交易ID',
+            cnsName: 'CNS名称',
+            addChain: '添加链',
+            chainNameLimit: '链名称不能为空',
+            IPLimit: 'IP地址校验失败',
+            PortLimit: '请输入数字：1 ~ 65535',
+            CNSNameLimit: 'CNS名称不能为空',
+            CNSVersionLimit: '版本号不能为空',
+            CNSAddrLimit: '合约地址不能为空',
+            addChainError:{
+                10200 : '链名字或ip、端口号有重复',
+                others : '添加失败！'
+            }
         },
         ...zhLocale
     },
@@ -212,7 +222,6 @@ export const messages = {
             pageNotExist:'Sorry,this page does not exist',
             add:'Add',
             cnsContractName : 'CNS Contract Name',
-            version:'Version',
             pinput:'Please enter the name',
             scAddr:'Contract Address',
             confirm:'Confirm',
@@ -245,7 +254,6 @@ export const messages = {
             submitChanges:"Submit Changes",
             submitSuccess:'Submit Successfully!',
             submitFailed:'Submit Failed!',
-            user:'User',
             password:'Password',
             monitorAddr:'Monitor Info',
             startNode:'Start Node',
@@ -284,9 +292,9 @@ export const messages = {
             publicKey:'Public key information',
             internalIP:'Internal IP',
             externalIP:'External IP',
-            rpcPort:'Rpc Port',
-            p2pPort:'P2p Port',
-            wsPort: 'ws Port',
+            rpcPort:'RPC Port',
+            p2pPort:'P2P Port',
+            wsPort: 'WS Port',
             type:'Type',
             status:'Status',
             owner:'Node creator',
@@ -301,7 +309,20 @@ export const messages = {
             userName: 'Server User Name',
             remoteUserName: 'Remote Server User Name',
             remoteIp: 'Remote Server Ip',
-            chainNotify: 'please input your first node info'
+            chainNotify: 'please input your first node info',
+            transactionId: 'Search by Transaction ID',
+            cnsName: 'CNS Name',
+            addChain: 'Add Chain',
+            chainNameLimit: 'Chain name is empty',
+            IPLimit: 'IP address verification failed',
+            PortLimit: 'Please input a number:：1 ~ 65535',
+            CNSNameLimit: 'CNS name is empty',
+            CNSVersionLimit: 'version is empty',
+            CNSAddrLimit: 'contract address is empty',
+            addChainError:{
+                10200 : 'There are duplicate chain names, ip or port numbers',
+                others : 'Add Failed'
+            }
         },
         ...enLocale
     }

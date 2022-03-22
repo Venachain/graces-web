@@ -334,6 +334,7 @@ export default {
     line-height: 25px;
     display: inline-block;
     margin-left: 10px;
+    text-align: right;
 }
 
 .user-info-list span {

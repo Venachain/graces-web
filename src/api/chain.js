@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import request2 from '@/utils/request2'
 
 // 查询链信息
 export function getChainList(data) {
@@ -11,7 +12,7 @@ export function getChainList(data) {
 
 // 添加链信息
 export function addChain(data) {
-    return request({
+    return request2({
         url: '/chain',
         method: 'post',
         data

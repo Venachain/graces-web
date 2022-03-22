@@ -2,7 +2,7 @@
     <div>
         <el-form :model="param" :rules="rules" ref="search" label-width="0px" class="ms-content" @submit.native.prevent>
             <el-form-item prop="info">
-                <el-input v-model="param.info" placeholder="Search by contract address" @keyup.enter.native="submitForm()">
+                <el-input v-model="param.info" :placeholder="`${$t('i18n.scAddr')}`" @keyup.enter.native="submitForm()">
                     <el-button slot="prepend" icon="el-icon-lx-search"></el-button>
                 </el-input>
             </el-form-item>
@@ -28,7 +28,7 @@
                         </el-form-item>
                         <el-form-item :label="$t('i18n.isSetCNS')">
                             <el-switch v-model="form.setCNS"></el-switch>
-                            <el-input v-model="form.CNS" placeholder="CNS Name" v-if="form.setCNS"></el-input>
+                            <el-input v-model="form.CNS" :placeholder="`${$t('i18n.cnsName')}`" v-if="form.setCNS"></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">

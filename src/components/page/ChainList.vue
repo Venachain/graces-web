@@ -3,7 +3,7 @@
         <div style="padding:0px 30px 10px 30px">
             <div class="button-line">
 <!--                <el-button type="primary" @click="dialogChainVisible = true">部署链</el-button>-->
-                <el-button type="primary" @click="dialogFormVisible = true">添加链</el-button>
+                <el-button type="primary" @click="dialogFormVisible = true">{{ $t('i18n.addChain') }}</el-button>
             </div>
             <el-card shadow="hover">
                 <el-table :data="chainList">
@@ -105,12 +105,13 @@ import { getChainList, queryChain, addChain, chainFullSync, chainIncrementSync }
 import { dataUrl } from '@/config';
 export default {
     data: function() {
+        let _this = this
         const valid = {
             name : (rule, value, callback)=>{
                 if (value.length === 0){
-                    callback(new Error('链名称不能为空！'))
+                    callback(new Error(_this.$t('i18n.chainNameLimit')))
                 }else if(value.length >20 ){
-                    callback(new Error('链名称不得超过20字！ '))
+                    callback(new Error('链名称不得超过20字'))
                 }else{
                     callback()
                 }
@@ -118,14 +119,14 @@ export default {
             ip : (rule, value, callback)=>{
                 const reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
                 if (!reg.test(value)){
-                    callback(new Error('IP地址校验失败！ '))
+                    callback(new Error(_this.$t('i18n.IPLimit')))
                 }else{
                     callback()
                 }
             },
             port : (rule, value, callback)=>{
                 if (!(value > 0 && value <= 65535)){
-                    callback(new Error('请输入数字(1 ~ 65535)!'))
+                    callback(new Error(_this.$t('i18n.PortLimit')))
                 }else{
                     callback()
                 }
@@ -273,6 +274,7 @@ export default {
             this.getChainsData();
         },
         submitForm() {
+            let _this = this
             this.$refs['chainForm'].validate((valid)=>{
                 if(valid){
                     let data = {
@@ -295,7 +297,7 @@ export default {
                             this.saveLoading = false;
                         })
                         .catch(err => {
-                            console.log(err);
+                            _this.showError(err)
                             this.saveLoading = false;
                         });
                 }else{
@@ -306,6 +308,16 @@ export default {
                     console.log('params error');
                 }
             })
+        },
+        showError(err){
+            let msg = ''
+            if (err.code){
+                msg = this.$t('i18n.addChainError.'+err.code)
+            }
+            if (msg.length === 0) {
+                msg = this.$t('i18n.addChainError.others')
+            }
+            this.$message.error(msg)
         },
         cancel() {
             this.dialogFormVisible = false;
