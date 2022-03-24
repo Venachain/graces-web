@@ -385,7 +385,6 @@ export default {
 
 /deep/.el-table .cell {
     padding-left: 0;
-    padding-right: 0;
 }
 
 .schart {

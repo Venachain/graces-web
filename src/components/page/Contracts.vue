@@ -1,9 +1,9 @@
 <template>
     <div>
-        <el-form :model="param" :rules="rules" ref="search" label-width="0px" class="ms-content" @submit.native.prevent>
+        <el-form :model="param" label-width="0px" class="ms-content" @submit.native.prevent>
             <el-form-item prop="info">
                 <el-input v-model="param.info" :placeholder="`${$t('i18n.scAddr')}`" @keyup.enter.native="submitForm()">
-                    <el-button slot="prepend" icon="el-icon-lx-search"></el-button>
+                    <el-button slot="prepend" icon="el-icon-lx-search" @click='submitForm'></el-button>
                 </el-input>
             </el-form-item>
         </el-form>
@@ -113,27 +113,23 @@ export default {
             return '';
         },
         submitForm() {
-            this.$refs.search.validate(valid => {
-                if (valid) {
-                    let data = {
-                        chain_id: this.chainId,
-                        address: this.param.info
-                    };
-                    getContractList(data).then(res => {
-                        if (res.data !== null) {
-                            this.contracts = res.data.items;
-                            this.totalCount = res.data.total;
-                        } else {
-                            this.contracts = [];
-                            this.totalCount = 0;
-                        }
-                    });
-                } else {
-                    this.$message.error(this.$t('i18n.searchInfo'));
-                    this.getData();
-                    return false;
-                }
-            });
+            if (this.param.info === ""){
+                this.getData();
+            }else{
+                let data = {
+                    chain_id: this.chainId,
+                    address: this.param.info
+                };
+                getContractList(data).then(res => {
+                    if (res.data !== null) {
+                        this.contracts = res.data.items;
+                        this.totalCount = res.data.total;
+                    } else {
+                        this.contracts = [];
+                        this.totalCount = 0;
+                    }
+                });
+            }
         },
         handleChange(file, fileList){
             const fileSuffix = file.name.substring(file.name.lastIndexOf(".") + 1);

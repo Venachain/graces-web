@@ -6,7 +6,7 @@
                     <div slot="header" style="margin-bottom: 10px">
                         <span>{{ $t('i18n.bkList') }}</span>
                     </div>
-                    <el-table :data="bkList" style="width: 100%;" max-height="550" :show-header="false" fit>
+                    <el-table :data="bkList" style="width: 100%;" max-height="550" :show-header="false" fit class="tableBox">
                         <el-table-column :width="220">
                             <template slot-scope="scope">
                                 <div class="bk_icon"><span>BK</span></div>
@@ -39,7 +39,7 @@
                     <div slot="header" style="margin-bottom: 10px">
                         <span>{{ $t('i18n.txList') }}</span>
                     </div>
-                    <el-table :data="txList" max-height="550" :show-header="false">
+                    <el-table :data="txList" max-height="550" :show-header="false" class="tableBox">
                         <el-table-column :width="330" show-overflow-tooltip>
                             <template slot-scope="scope">
                                 <div class="bk_icon tx_icon"><span>TX</span></div>
@@ -156,6 +156,11 @@ a {
     width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/deep/ .tableBox .cell {
+    padding: 0 !important;
+    height: 48px;
 }
 </style>
 
