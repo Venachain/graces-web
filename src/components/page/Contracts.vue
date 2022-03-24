@@ -17,7 +17,13 @@
                     <el-form :model="form">
                         <el-form-item :label="$t('i18n.contractFile')">
                             <div style="display:inline-block">
-                                <el-upload ref="upload" drag action="" multiple :http-request="httpRequest" :auto-upload="false">
+                                <el-upload ref="upload" drag action="" multiple
+                                           :http-request="httpRequest"
+                                           :auto-upload="false"
+                                           :file-list="fileList"
+                                           :on-change='handleChange'
+                                           :on-exceed="handleExceed"
+                                           :limit='2'>
                                     <i class="el-icon-upload"></i>
                                     <div class="el-upload__text">
                                         {{ $t('i18n.dragFile') }}<em>{{ $t('i18n.clickUpload') }}</em>
@@ -45,10 +51,10 @@
                             }}</router-link></template
                         >
                     </el-table-column>
-                    <el-table-column :label="`Creator`" show-overflow-tooltip :max-width="250">
+                    <el-table-column :label="`${$t('i18n.creator')}`" show-overflow-tooltip :max-width="250">
                         <template slot-scope="scope">{{ scope.row.creator }}</template>
                     </el-table-column>
-                    <el-table-column :label="`Transaction`" show-overflow-tooltip :max-width="250">
+                    <el-table-column :label="`${$t('i18n.Transaction')}`" show-overflow-tooltip :max-width="250">
                         <template slot-scope="scope"
                             ><router-link :to="'/tx/' + scope.row.tx_hash + '/chain/' + chainId">{{
                                 scope.row.tx_hash
@@ -93,6 +99,7 @@ export default {
                 CNS: ''
             },
             file: [],
+            fileList: [],
             dialogFormVisible: false,
             chainId: this.$route.params.chainId,
             deployLoading: false
@@ -128,13 +135,24 @@ export default {
                 }
             });
         },
+        handleChange(file, fileList){
+            const fileSuffix = file.name.substring(file.name.lastIndexOf(".") + 1);
+            const whiteList = ['json','wasm'];
+            if (whiteList.indexOf(fileSuffix) === -1) {
+                this.$message.warning(this.$t('i18n.fileExt'))
+                this.fileList=fileList.slice(0,fileList.length-1)
+                return false;
+            }
+        },
+        handleExceed() {
+            this.$message.warning(this.$t('i18n.twoFiles'));
+        },
         httpRequest(param) {
             if (this.file.length > 1) {
                 return;
             }
             this.file.push(param.file);
         },
-
         submitDeploy() {
             this.$refs.upload.submit();
             var updata = new FormData();

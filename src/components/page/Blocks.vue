@@ -2,7 +2,7 @@
 <div class="blocks">
     <el-form :model="param" :rules="rules" ref="search" label-width="0px" class="ms-content" @submit.native.prevent>
         <el-form-item prop="info">
-            <el-input v-model="param.info" placeholder="Search by Block Number/Hash" @keyup.enter.native="submitForm">
+            <el-input v-model="param.info" :placeholder="`${$t('i18n.blockSearch')}`" @keyup.enter.native="submitForm">
                 <el-button slot="prepend" icon="el-icon-lx-search"></el-button>
             </el-input>
         </el-form-item>

@@ -51,7 +51,7 @@
         </div>
         <el-dialog :title="$t('i18n.add')" :visible.sync="dialogFormVisible">
             <p class="notify">{{ $t('i18n.chainNotify') }}</p>
-            <el-form ref="chainForm" :model="chainForm" label-width="150px" :label-position="'left'" :rules='chainRules'>
+            <el-form ref="chainForm" :model="chainForm" label-width="100px" :rules='chainRules' class='chainForm'>
                 <el-form-item :label="$t('i18n.chainName') + ':'" prop='name'>
                     <el-input v-model="chainForm.name" :placeholder="$t('i18n.chainName')" maxlength="20"></el-input>
                 </el-form-item>

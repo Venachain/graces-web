@@ -6,7 +6,7 @@
                     <div slot="header" style="margin-bottom: 10px">
                         <span>{{ $t('i18n.bkList') }}</span>
                     </div>
-                    <el-table :data="bkList" style="width: 100%" max-height="550" :show-header="false">
+                    <el-table :data="bkList" style="width: 100%;" max-height="550" :show-header="false" fit>
                         <el-table-column :width="220">
                             <template slot-scope="scope">
                                 <div class="bk_icon"><span>BK</span></div>
@@ -16,9 +16,9 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column>
+                        <el-table-column show-overflow-tooltip>
                             <template slot-scope="scope">
-                                <div style="display: block">
+                                <div style="display: inline-block;width: 250px;overflow: hidden;text-overflow: ellipsis;">
                                     <span style="font-weight: bold">Miner </span>
                                     {{ scope.row.proposer }}
                                 </div>
@@ -93,6 +93,13 @@ export default {
         },
         onClickTx() {
             this.$router.push('/txs/' + this.chainId);
+        },
+        brief(v){
+            const len = 20
+            if (v.length>len){
+                return v.slice(0,20)+'...'
+            }
+            return v
         }
     }
 };

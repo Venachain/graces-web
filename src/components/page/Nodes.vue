@@ -44,13 +44,13 @@
                         <el-button type="danger" @click="removeNode">{{ $t('i18n.removeNode') }}</el-button>
                     </template>
                 </el-table-column> -->
-                <el-table-column type="expand" v-if="showEdit">
+                <!-- <el-table-column type="expand" v-if="showEdit">
                     <template slot-scope="props">
                         <el-button @click="start(props.row)">{{ $t('i18n.startNode') }}</el-button>
                         <el-button @click="stop(props.row)">{{ $t('i18n.stopNode') }}</el-button>
                         <el-button @click="restart(props.row)">{{ $t('i18n.restartNode') }}</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </el-scrollbar>
 
