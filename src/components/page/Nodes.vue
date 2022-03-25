@@ -12,17 +12,19 @@
 
         <el-scrollbar style="height: 100%">
             <el-table :data="nodeList" :max-height="height" style="width: 100%" :show-header="false">
-                <el-table-column show-overflow-tooltip>
+                <el-table-column>
                     <template v-slot="scope">
                         <div class="node_icon"><span>Node</span></div>
                         <div class="node_icon_right">
                             <div class="node_key">
-                                <router-link v-if="isAlive(scope.row)" :to="'/node/' + scope.row.id + '/' + chainId">
-                                    {{ scope.row.name + '(' + scope.row.public_key + ')' }}
-                                </router-link>
-                                <div v-else>
-                                    {{ scope.row.name + '(' + scope.row.public_key + ')' }}
-                                </div>
+                                <el-tooltip popper-class='tooltip' effect="dark" :content="scope.row.name + '(' + scope.row.public_key + ')'" placement="top">
+                                    <router-link v-if="isAlive(scope.row)" :to="'/node/' + scope.row.id + '/' + chainId">
+                                        {{ brief(scope.row.name + '(' + scope.row.public_key + ')') }}
+                                    </router-link>
+                                    <div v-else>
+                                        {{ brief(scope.row.name + '(' + scope.row.public_key + ')') }}
+                                    </div>
+                                </el-tooltip>
                             </div>
                             <div style="display: inline-block">{{ scope.row.p2p_port }}</div>
                             <div style="display: inline-block; margin-left: 20px; font-weight: bold">
@@ -300,6 +302,13 @@ export default {
         },
         isAlive(row) {
             return row.is_alive && row.status==1 && row.blocknumber > 0
+        },
+        brief(v){
+            let len = v.length
+            if (len>60){
+                v = v.slice(0,60)+'...'
+            }
+            return v
         }
     },
     mounted: function () {
@@ -382,5 +391,11 @@ export default {
     border-bottom-left-radius: 0;
     transition: 0.2s ease-in-out;
     display: inline-block;
+}
+</style>
+<style>
+.tooltip{
+    max-width: 400px;
+    word-wrap: break-word;
 }
 </style>
