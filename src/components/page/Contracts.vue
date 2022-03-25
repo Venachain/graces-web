@@ -34,7 +34,7 @@
                         </el-form-item>
                         <el-form-item :label="$t('i18n.isSetCNS')">
                             <el-switch v-model="form.setCNS"></el-switch>
-                            <el-input v-model="form.CNS" :placeholder="`${$t('i18n.cnsName')}`" v-if="form.setCNS"></el-input>
+                            <el-input v-model="form.CNS" :placeholder="`${$t('i18n.cnsName')}`" v-if="form.setCNS" maxlength="100"></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -150,6 +150,10 @@ export default {
             this.file.push(param.file);
         },
         submitDeploy() {
+            if (this.file.length === 0){
+                this.$message.warning(this.$t('i18n.conAdd'))
+                return
+            }
             this.$refs.upload.submit();
             var updata = new FormData();
             this.file.forEach(function(file) {
@@ -171,17 +175,33 @@ export default {
                         cnsRegister(data).then(res => {
                             console.log(data);
                             console.log(res);
+                            this.$message.success(this.$t('i18n.ConSuccess'))
+                            this.getData()
+                            this.deployLoading = false
+                            this.dialogFormVisible = false
+                            this.$refs.upload.clearFiles();
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                            this.$message.warning(this.$t('i18n.ConCnsFailed'))
+                            this.getData()
+                            this.deployLoading = false
+                            this.dialogFormVisible = false
+                            this.$refs.upload.clearFiles();
                         });
+                    }else{
+                        this.$message.success(this.$t('i18n.ConSuccess'));
+                        this.getData()
+                        this.deployLoading = false
+                        this.dialogFormVisible = false
+                        this.$refs.upload.clearFiles()
                     }
-                    this.$message.success(this.$t('i18n.submitSuccess'));
-                    this.deployLoading = false;
-                    window.location.reload();
                 })
                 .catch(err => {
-                    console.log(err);
-                    this.deployLoading = false;
+                    console.log(err)
+                    this.$message.error(this.$t('i18n.ConFailed'))
+                    this.deployLoading = false
                 });
-            this.dialogFormVisible = false;
         },
         getData() {
             let data = {

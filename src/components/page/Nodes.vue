@@ -12,7 +12,7 @@
 
         <el-scrollbar style="height: 100%">
             <el-table :data="nodeList" :max-height="height" style="width: 100%" :show-header="false">
-                <el-table-column>
+                <el-table-column show-overflow-tooltip>
                     <template v-slot="scope">
                         <div class="node_icon"><span>Node</span></div>
                         <div class="node_icon_right">

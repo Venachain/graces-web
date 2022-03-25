@@ -110,8 +110,6 @@ export default {
             name : (rule, value, callback)=>{
                 if (value.length === 0){
                     callback(new Error(_this.$t('i18n.chainNameLimit')))
-                }else if(value.length >20 ){
-                    callback(new Error('链名称不得超过20字'))
                 }else{
                     callback()
                 }
