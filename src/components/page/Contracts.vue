@@ -150,11 +150,11 @@ export default {
             this.file.push(param.file);
         },
         submitDeploy() {
+            this.$refs.upload.submit();
             if (this.file.length === 0){
                 this.$message.warning(this.$t('i18n.conAdd'))
                 return
             }
-            this.$refs.upload.submit();
             var updata = new FormData();
             this.file.forEach(function(file) {
                 updata.append('file', file, file.name);
