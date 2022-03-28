@@ -120,9 +120,8 @@ export default {
             this.$router.push('/txs/' + this.chainId);
         },
         brief(v) {
-            let len = v.length;
-            if (len > 40) {
-                v = v.slice(0, 40) + '...';
+            if (v.length > 30) {
+                v = v.slice(0, 30) + '...';
             }
             return v;
         }

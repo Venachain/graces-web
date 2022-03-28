@@ -304,9 +304,8 @@ export default {
             return row.is_alive && row.status==1 && row.blocknumber > 0
         },
         brief(v){
-            let len = v.length
-            if (len>60){
-                v = v.slice(0,60)+'...'
+            if (v.length>50){
+                v = v.slice(0,50)+'...'
             }
             return v
         }
