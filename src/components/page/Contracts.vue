@@ -180,6 +180,7 @@ export default {
                             this.deployLoading = false
                             this.dialogFormVisible = false
                             this.$refs.upload.clearFiles();
+                            this.resetForm()
                         })
                         .catch(err=>{
                             console.log(err)
@@ -188,6 +189,7 @@ export default {
                             this.deployLoading = false
                             this.dialogFormVisible = false
                             this.$refs.upload.clearFiles();
+                            this.resetForm()
                         });
                     }else{
                         this.$message.success(this.$t('i18n.ConSuccess'));
@@ -195,6 +197,7 @@ export default {
                         this.deployLoading = false
                         this.dialogFormVisible = false
                         this.$refs.upload.clearFiles()
+                        this.resetForm()
                     }
                 })
                 .catch(err => {
@@ -223,6 +226,10 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val;
             this.getData();
+        },
+        resetForm(){
+            this.form.CNS = ''
+            this.form.setCNS = false
         }
     },
     mounted: function() {

@@ -19,12 +19,13 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column show-overflow-tooltip>
+                        <el-table-column>
                             <template slot-scope='scope'>
-                                <div
-                                    style='display: inline-block;width: 250px;overflow: hidden;text-overflow: ellipsis;'>
-                                    <span style='font-weight: bold'>Miner </span>
-                                    {{ scope.row.proposer }}
+                                <div style='display: flex;flex-direction: row;overflow: hidden;text-overflow: ellipsis;'>
+                                    <span style='font-weight: bold; margin-right: 4px'>Miner </span>
+                                    <el-tooltip popper-class='tooltip' effect='dark' :content='scope.row.proposer' placement='top'>
+                                        <div>{{brief2(scope.row.proposer,45) }}</div>
+                                    </el-tooltip>
                                 </div>
                                 <div style='display: block'>
                                     <router-link :to="'/tx/' + scope.row.id + '/block/' + chainId">
@@ -53,7 +54,7 @@
                                     <div class='bk_icon_right'>
                                         <el-tooltip popper-class='tooltip' effect='dark' :content='scope.row.hash' placement='top'>
                                             <router-link :to="'/tx/' + scope.row.hash + '/chain/' + chainId" class='txhash'>
-                                                {{ brief(scope.row.hash) }}
+                                                {{ brief2(scope.row.hash,40) }}
                                             </router-link>
                                         </el-tooltip>
                                         <div>{{ scope.row.timestamp }}</div>
@@ -122,6 +123,12 @@ export default {
         brief(v) {
             if (v.length > 30) {
                 v = v.slice(0, 30) + '...';
+            }
+            return v;
+        },
+        brief2(v, len) {
+            if (v.length > len) {
+                v = v.slice(0, len) + '...';
             }
             return v;
         }
