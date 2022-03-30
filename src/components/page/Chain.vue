@@ -2,27 +2,29 @@
     <div>
         <el-row :gutter="20">
             <el-col :span="6">
-                <el-card shadow="hover" class="mgb20" style='height:100px;'>
-                    <div class="user-info-list">
-                        <div>{{ $t('i18n.chainName') }}：</div>
-                        <div>IP：</div>
-                    </div>
-                    <div class="user-info-list">
-                        <div>{{ chainInfo.name }}</div>
-                        <div>{{ chainInfo.ip }}</div>
-                    </div>
+                <el-card shadow="hover" class="mgb20 infoTable" style='height: 100px'>
+                    <el-table
+                        :show-header="false"
+                        :data="chainData"
+                        style="width: 100%;font-size: 14px;min-width: 80px;margin-top: -5px"
+                        size='mini'
+                        :cell-style="{background:'#fff'}">
+                        <el-table-column prop="name" width='80px' className='cell1' :show-overflow-tooltip="true"></el-table-column>
+                        <el-table-column prop="value" className='cell2' :show-overflow-tooltip="true"></el-table-column>
+                    </el-table>
                 </el-card>
             </el-col>
             <el-col :span="6">
-                <el-card shadow="hover" class="mgb20" style='height:100px;'>
-                    <div class="user-info-list">
-                        <div>{{ $t('i18n.rpcPort') }}:</div>
-                        <div>{{ $t('i18n.p2pPort') }}:</div>
-                    </div>
-                    <div class="user-info-list">
-                        <div>{{ chainInfo.rpc_port }}</div>
-                        <div>{{ chainInfo.p2p_port }}</div>
-                    </div>
+                <el-card shadow="hover" class="mgb20 infoTable" style='height: 100px'>
+                    <el-table
+                        :show-header="false"
+                        :data="chainData2"
+                        style="width: 100%;margin-top: -5px;font-size: 14px;min-width: 200px"
+                        size='mini'
+                        :cell-style="{background:'#fff'}">
+                        <el-table-column prop="name" width='100px' className='cell1' :show-overflow-tooltip="true"></el-table-column>
+                        <el-table-column prop="value" className='cell2' :show-overflow-tooltip="true"></el-table-column>
+                    </el-table>
                 </el-card>
             </el-col>
             <el-col :span="12">
@@ -89,6 +91,14 @@ export default {
     data() {
         return {
             chainInfo: {},
+            chainData: [
+                {name:this.$t('i18n.chainName')+'：', value:''},
+                {name:'IP：',value:''}
+            ],
+            chainData2: [
+                {name:this.$t('i18n.rpcPort')+'：', value:''},
+                {name:this.$t('i18n.p2pPort')+'：', value:''}
+            ],
             stats: {
                 latest_height: 0,
                 total_tx: 0,
@@ -179,6 +189,10 @@ export default {
             queryChainById(this.chainId).then((res) => {
                 if (res.data != null) {
                     this.chainInfo = res.data
+                    this.chainData[0].value = res.data.name
+                    this.chainData[1].value = res.data.ip
+                    this.chainData2[0].value = res.data.rpc_port
+                    this.chainData2[1].value = res.data.p2p_port
                 }
             })
         },
@@ -334,6 +348,7 @@ export default {
     line-height: 25px;
     display: inline-block;
     margin-left: 10px;
+    text-align: right;
 }
 
 .user-info-list span {
@@ -344,8 +359,32 @@ export default {
     margin-bottom: 6px;
 }
 
-.node_list {
-    height: 330px;
+.mgb20 .el-form-item{
+    margin: 0;
+}
+
+.infoTable >>> .el-table__row>td{
+    border: none;
+}
+
+.infoTable >>> .el-table::before{
+    height: 0;
+}
+
+.infoTable >>> .el-table .cell1 {
+    text-align: right;
+    vertical-align: top;
+    font-size: 14px;
+}
+
+.infoTable >>> .el-table .cell2 {
+    text-align: left;
+    vertical-align: top;
+    font-size: 14px;
+}
+
+/deep/.el-table .cell {
+    padding-left: 0;
 }
 
 .schart {

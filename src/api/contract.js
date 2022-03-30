@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import request2 from '@/utils/request2';
 
 // 根据hash查询区块信息
 export function getContractByAddress(data) {
@@ -19,7 +20,7 @@ export function getContractList(data) {
 }
 
 export function deployContract(chainId, data) {
-    return request({
+    return request2({
         url: '/chain/deploy/contract/' + chainId,
         method: 'post',
         header: {'Content-Type': 'multipart/form-data' },

@@ -16,7 +16,7 @@
             </el-col>
             <el-col :span="16">
                 <!-- normal -->
-                <span v-if="![2, 3, 6, 8, 12, 13].includes(item.id)">{{item.value}}</span>
+                <span v-if="![2, 3, 6, 8, 12, 13, 14].includes(item.id)" style='word-wrap: break-word;'>{{item.value}}</span>
 
                 <!-- status -->
                 <div v-if="item.id == 2" class="tx-status" :class="{'tx-fail': item.value == 0}"> {{item.value == 1?"Success":"Fail"}}</div>
@@ -43,11 +43,11 @@
                     <el-input type="textarea" :rows="2" v-model="item.value" disabled></el-input>
                 </div>
                 <div v-if="item.id == 13">
-                    <pre v-html="item.value" >  </pre>
+                    <pre v-html="item.value">  </pre>
                 </div>
-                <!-- <div v-if="item.id == 14">
-                    {{item.value}}
-                </div> -->
+                <div v-if="item.id == 14">
+                    <el-input type="textarea" :rows="3" v-model="item.value" disabled></el-input>
+                </div>
             </el-col>
         </el-row>
         <hr class ="hr_space">

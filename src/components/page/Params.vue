@@ -153,4 +153,7 @@ export default {
 .row-box-line {
     margin-bottom: 20px;
 }
+/deep/ .el-slider .el-slider__input{
+    width: 140px;
+}
 </style>

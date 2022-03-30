@@ -1,9 +1,9 @@
 <template>
 <div>
-    <el-form :model="param" :rules="rules" ref="search" label-width="0px" class="ms-content" @submit.native.prevent>
+    <el-form :model="param" label-width="0px" class="ms-content" @submit.native.prevent>
         <el-form-item prop="info">
-            <el-input v-model="param.info" placeholder="Search by Transaction ID" @keyup.enter.native="submitForm()">
-                <el-button slot="prepend" icon="el-icon-lx-search"></el-button>
+            <el-input v-model="param.info" :placeholder="`${$t('i18n.transactionId')}`" @keyup.enter.native="submitForm()">
+                <el-button slot="prepend" icon="el-icon-lx-search" @click='submitForm'></el-button>
             </el-input>
         </el-form-item>
     </el-form>
@@ -81,28 +81,23 @@ export default {
             return data
         },
         submitForm() {
-            this.$refs.search.validate(valid => {
-                if (valid) {
-                    let data = {
-                        hash: this.param.info
-                    }
-                    data = this.getPostData(data)
-                    getTxList(data).then((res) => {
-                        if (res.data != null) {
-                            this.txList = res.data.items
-                            this.totalCount = res.data.total
-                        } else {
-                            this.txList = []
-                            this.totalCount = 0
-                        }
-                    })
-
-                } else {
-                    this.$message.error(this.$t("i18n.searchInfo"))
-                    this.getData()
-                    return false
+            if (this.param.info === ''){
+                this.getData()
+            }else{
+                let data = {
+                    hash: this.param.info
                 }
-            });
+                data = this.getPostData(data)
+                getTxList(data).then((res) => {
+                    if (res.data != null) {
+                        this.txList = res.data.items
+                        this.totalCount = res.data.total
+                    } else {
+                        this.txList = []
+                        this.totalCount = 0
+                    }
+                })
+            }
         },
         getData(){
             let data = this.getPostData()
@@ -125,14 +120,6 @@ export default {
     mounted:function() {
         this.getData()
         // setInterval(this.getData(),2000)
-    },
-    computed:{
-        rules()
-        {
-            return {
-                info: [{ required: true, message: this.$t("i18n.searchInfo"), trigger: 'blur' }]
-            }
-        },
     },
     watch: {
         '$route' (to, from) {

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import request2 from '@/utils/request2'
 
 // 查询节点信息
 export function getCnsList(data) {
@@ -11,7 +12,7 @@ export function getCnsList(data) {
 
 // 节点监控
 export function cnsRegister(data) {
-    return request({
+    return request2({
         url: '/cns/register',
         method: 'post',
         data

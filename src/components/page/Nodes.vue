@@ -5,9 +5,9 @@
             <!-- <el-button style="float: right; padding: 3px 10px" type="text" v-if="showEdit" @click="openDialog2">{{
                 $t('i18n.addNodeAccess')
             }}</el-button> -->
-            <el-button style="float: right; padding: 3px 10px" type="text" v-if="showEdit" @click="openDialog">{{
+            <!-- <el-button style="float: right; padding: 3px 10px" type="text" v-if="showEdit" @click="openDialog">{{
                 $t('i18n.deployNewNode')
-            }}</el-button>
+            }}</el-button> -->
         </div>
 
         <el-scrollbar style="height: 100%">
@@ -17,12 +17,14 @@
                         <div class="node_icon"><span>Node</span></div>
                         <div class="node_icon_right">
                             <div class="node_key">
-                                <router-link v-if="isAlive(scope.row)" :to="'/node/' + scope.row.id + '/' + chainId">
-                                    {{ scope.row.name + '(' + scope.row.public_key + ')' }}
-                                </router-link>
-                                <div v-else>
-                                    {{ scope.row.name + '(' + scope.row.public_key + ')' }}
-                                </div>
+                                <el-tooltip popper-class='tooltip' effect="dark" :content="scope.row.name + '(' + scope.row.public_key + ')'" placement="top">
+                                    <router-link v-if="isAlive(scope.row)" :to="'/node/' + scope.row.id + '/' + chainId">
+                                        {{ brief(scope.row.name + '(' + scope.row.public_key + ')') }}
+                                    </router-link>
+                                    <div v-else>
+                                        {{ brief(scope.row.name + '(' + scope.row.public_key + ')') }}
+                                    </div>
+                                </el-tooltip>
                             </div>
                             <div style="display: inline-block">{{ scope.row.p2p_port }}</div>
                             <div style="display: inline-block; margin-left: 20px; font-weight: bold">
@@ -44,13 +46,13 @@
                         <el-button type="danger" @click="removeNode">{{ $t('i18n.removeNode') }}</el-button>
                     </template>
                 </el-table-column> -->
-                <el-table-column type="expand" v-if="showEdit">
+                <!-- <el-table-column type="expand" v-if="showEdit">
                     <template slot-scope="props">
                         <el-button @click="start(props.row)">{{ $t('i18n.startNode') }}</el-button>
                         <el-button @click="stop(props.row)">{{ $t('i18n.stopNode') }}</el-button>
                         <el-button @click="restart(props.row)">{{ $t('i18n.restartNode') }}</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </el-scrollbar>
 
@@ -300,6 +302,12 @@ export default {
         },
         isAlive(row) {
             return row.is_alive && row.status==1 && row.blocknumber > 0
+        },
+        brief(v){
+            if (v.length>50){
+                v = v.slice(0,50)+'...'
+            }
+            return v
         }
     },
     mounted: function () {
@@ -326,6 +334,10 @@ export default {
 </script>
 
 <style scoped>
+/deep/ .el-scrollbar .el-scrollbar__wrap{
+    padding-bottom: 20px;
+}
+
 .node_icon {
     width: 40px;
     height: 40px;
@@ -378,5 +390,11 @@ export default {
     border-bottom-left-radius: 0;
     transition: 0.2s ease-in-out;
     display: inline-block;
+}
+</style>
+<style>
+.tooltip{
+    max-width: 400px;
+    word-wrap: break-word;
 }
 </style>

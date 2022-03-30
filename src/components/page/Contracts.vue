@@ -1,9 +1,9 @@
 <template>
     <div>
-        <el-form :model="param" :rules="rules" ref="search" label-width="0px" class="ms-content" @submit.native.prevent>
+        <el-form :model="param" label-width="0px" class="ms-content" @submit.native.prevent>
             <el-form-item prop="info">
-                <el-input v-model="param.info" placeholder="Search by contract address" @keyup.enter.native="submitForm()">
-                    <el-button slot="prepend" icon="el-icon-lx-search"></el-button>
+                <el-input v-model="param.info" :placeholder="`${$t('i18n.scAddr')}`" @keyup.enter.native="submitForm()">
+                    <el-button slot="prepend" icon="el-icon-lx-search" @click='submitForm'></el-button>
                 </el-input>
             </el-form-item>
         </el-form>
@@ -17,7 +17,13 @@
                     <el-form :model="form">
                         <el-form-item :label="$t('i18n.contractFile')">
                             <div style="display:inline-block">
-                                <el-upload ref="upload" drag action="" multiple :http-request="httpRequest" :auto-upload="false">
+                                <el-upload ref="upload" drag action="" multiple
+                                           :http-request="httpRequest"
+                                           :auto-upload="false"
+                                           :file-list="fileList"
+                                           :on-change='handleChange'
+                                           :on-exceed="handleExceed"
+                                           :limit='2'>
                                     <i class="el-icon-upload"></i>
                                     <div class="el-upload__text">
                                         {{ $t('i18n.dragFile') }}<em>{{ $t('i18n.clickUpload') }}</em>
@@ -28,7 +34,7 @@
                         </el-form-item>
                         <el-form-item :label="$t('i18n.isSetCNS')">
                             <el-switch v-model="form.setCNS"></el-switch>
-                            <el-input v-model="form.CNS" placeholder="CNS Name" v-if="form.setCNS"></el-input>
+                            <el-input v-model="form.CNS" :placeholder="`${$t('i18n.cnsName')}`" v-if="form.setCNS" maxlength="100"></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -45,10 +51,10 @@
                             }}</router-link></template
                         >
                     </el-table-column>
-                    <el-table-column :label="`Creator`" show-overflow-tooltip :max-width="250">
+                    <el-table-column :label="`${$t('i18n.creator')}`" show-overflow-tooltip :max-width="250">
                         <template slot-scope="scope">{{ scope.row.creator }}</template>
                     </el-table-column>
-                    <el-table-column :label="`Transaction`" show-overflow-tooltip :max-width="250">
+                    <el-table-column :label="`${$t('i18n.Transaction')}`" show-overflow-tooltip :max-width="250">
                         <template slot-scope="scope"
                             ><router-link :to="'/tx/' + scope.row.tx_hash + '/chain/' + chainId">{{
                                 scope.row.tx_hash
@@ -93,6 +99,7 @@ export default {
                 CNS: ''
             },
             file: [],
+            fileList: [],
             dialogFormVisible: false,
             chainId: this.$route.params.chainId,
             deployLoading: false
@@ -106,27 +113,35 @@ export default {
             return '';
         },
         submitForm() {
-            this.$refs.search.validate(valid => {
-                if (valid) {
-                    let data = {
-                        chain_id: this.chainId,
-                        address: this.param.info
-                    };
-                    getContractList(data).then(res => {
-                        if (res.data !== null) {
-                            this.contracts = res.data.items;
-                            this.totalCount = res.data.total;
-                        } else {
-                            this.contracts = [];
-                            this.totalCount = 0;
-                        }
-                    });
-                } else {
-                    this.$message.error(this.$t('i18n.searchInfo'));
-                    this.getData();
-                    return false;
-                }
-            });
+            if (this.param.info === ""){
+                this.getData();
+            }else{
+                let data = {
+                    chain_id: this.chainId,
+                    address: this.param.info
+                };
+                getContractList(data).then(res => {
+                    if (res.data !== null) {
+                        this.contracts = res.data.items;
+                        this.totalCount = res.data.total;
+                    } else {
+                        this.contracts = [];
+                        this.totalCount = 0;
+                    }
+                });
+            }
+        },
+        handleChange(file, fileList){
+            const fileSuffix = file.name.substring(file.name.lastIndexOf(".") + 1);
+            const whiteList = ['json','wasm'];
+            if (whiteList.indexOf(fileSuffix) === -1) {
+                this.$message.warning(this.$t('i18n.fileExt'))
+                this.fileList=fileList.slice(0,fileList.length-1)
+                return false;
+            }
+        },
+        handleExceed() {
+            this.$message.warning(this.$t('i18n.twoFiles'));
         },
         httpRequest(param) {
             if (this.file.length > 1) {
@@ -134,9 +149,12 @@ export default {
             }
             this.file.push(param.file);
         },
-
         submitDeploy() {
             this.$refs.upload.submit();
+            if (this.file.length === 0){
+                this.$message.warning(this.$t('i18n.conAdd'))
+                return
+            }
             var updata = new FormData();
             this.file.forEach(function(file) {
                 updata.append('file', file, file.name);
@@ -157,17 +175,36 @@ export default {
                         cnsRegister(data).then(res => {
                             console.log(data);
                             console.log(res);
+                            this.$message.success(this.$t('i18n.ConSuccess'))
+                            this.getData()
+                            this.deployLoading = false
+                            this.dialogFormVisible = false
+                            this.$refs.upload.clearFiles();
+                            this.resetForm()
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                            this.$message.warning(this.$t('i18n.ConCnsFailed'))
+                            this.getData()
+                            this.deployLoading = false
+                            this.dialogFormVisible = false
+                            this.$refs.upload.clearFiles();
+                            this.resetForm()
                         });
+                    }else{
+                        this.$message.success(this.$t('i18n.ConSuccess'));
+                        this.getData()
+                        this.deployLoading = false
+                        this.dialogFormVisible = false
+                        this.$refs.upload.clearFiles()
+                        this.resetForm()
                     }
-                    this.$message.success(this.$t('i18n.submitSuccess'));
-                    this.deployLoading = false;
-                    window.location.reload();
                 })
                 .catch(err => {
-                    console.log(err);
-                    this.deployLoading = false;
+                    console.log(err)
+                    this.$message.error(this.$t('i18n.ConFailed'))
+                    this.deployLoading = false
                 });
-            this.dialogFormVisible = false;
         },
         getData() {
             let data = {
@@ -189,6 +226,10 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val;
             this.getData();
+        },
+        resetForm(){
+            this.form.CNS = ''
+            this.form.setCNS = false
         }
     },
     mounted: function() {

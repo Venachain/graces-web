@@ -4,7 +4,7 @@
             <span>{{ $t('i18n.nodeList') }}</span>
         </div>
 
-        <el-scrollbar style="height: 100%">
+        <el-scrollbar>
             <el-table :data="nodeList" :max-height="height" style="width: 100%" :show-header="false">
                 <el-table-column>
                     <template v-slot="scope">
@@ -63,6 +63,10 @@ export default {
 </script>
 
 <style scoped>
+/deep/ .el-scrollbar .el-scrollbar__wrap{
+    padding-bottom: 18px;
+}
+
 .node_icon {
     width: 40px;
     height: 40px;
