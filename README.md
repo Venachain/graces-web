@@ -16,5 +16,5 @@
 - 启动
     ```shell
     npm install 
-    npm run serve
+    npm run dev
     ```
