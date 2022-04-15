@@ -1,11 +1,16 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
+import Vue from 'vue';
 
 axios.defaults.withCredentials = true
 
+function getBaseUrl() {
+  return Vue.prototype.BASE_URL
+}
+
 // create an axios instance
 const service = axios.create({
-    baseURL: process.env.VUE_APP_BASE_API,
+    baseURL: getBaseUrl(),
     timeout: 5000
 })
 

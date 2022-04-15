@@ -116,7 +116,7 @@ export default {
         getWebsocket() {
             if (this.websocket === null) {
                 let that = this
-                let host = process.env.VUE_APP_BASE_WS + '/ws/' + this.chainId
+                let host = this.BASE_WS + '/ws/' + this.chainId
                 that.websocket = new WebSocket(host);
                 //连接发生错误的回调方法
                 that.websocket.onerror = function() {

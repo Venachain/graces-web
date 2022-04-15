@@ -202,7 +202,7 @@ export default {
         getWebsocket(jsonStr) {
             if (this.websocket === null) {
                 let that = this;
-                let host = process.env.VUE_APP_BASE_WS + '/ws/deploy';
+                let host = this.BASE_WS + '/ws/deploy';
                 that.websocket = new WebSocket(host);
                 //连接发生错误的回调方法
                 that.websocket.onerror = function() {
