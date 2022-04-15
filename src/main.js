@@ -12,9 +12,6 @@ import 'babel-polyfill';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-if (process.env.NODE_ENV == 'development'){
-    require( './mock');
-}
 
 Vue.config.productionTip = false;
 
@@ -49,8 +46,28 @@ router.beforeEach((to, from, next) => {
     }
 });
 
-new Vue({
-    router,
-    i18n,
-    render: h => h(App)
-}).$mount('#app');
+
+
+let startWeb = function() {
+    
+    axios.get('/static/config.json').then(res => {
+        Vue.prototype.BASE_URL = res.data.BASE_URL;
+        Vue.prototype.BASE_WS = res.data.BASE_WS;
+        Vue.prototype.BASE_ENV = res.data.BASE_ENV;
+
+        if (res.data.BASE_ENV == 'development'){
+            require( './mock');
+        }
+        new Vue({
+            router,
+            i18n,
+            render: h => h(App)
+        }).$mount('#app');
+    })
+}
+
+startWeb();
+
+
+
+

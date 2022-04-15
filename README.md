@@ -18,3 +18,7 @@
     npm install 
     npm run dev
     ```
+
+### 打包说明
+  - npm run build 后  将 dist文件夹中  config.json 移动到 static文件夹下
+    - 可在外部配置 BASE_URL  BASE_WS

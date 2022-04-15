@@ -1,0 +1,5 @@
+{
+    "BASE_URL": "http://localhost:9999/api",
+    "BASE_WS": "ws://localhost:9999/api",
+    "BASE_ENV": "production"
+}
